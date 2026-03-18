@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TaperedProcessDiagram — Left to Right</title>
+  <style>
+    :root {
+      --page-bg: #f3f3f3;
+      --text-secondary: #666;
+      --line-color: #9a9a9a;
+    }
+
+    body {
+      margin: 0;
+      background: var(--page-bg);
+      font-family: Arial, sans-serif;
+      padding: 24px;
+      box-sizing: border-box;
+    }
+
+    .toolbar {
+      max-width: 1100px;
+      margin: 0 auto 14px;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .toolbar button {
+      border: 1px solid #c2c2c2;
+      background: #fff;
+      color: #333;
+      padding: 8px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .grid {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+
+    .chart-shell {
+      background: var(--page-bg);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    svg {
+      display: block;
+      width: 100%;
+      height: auto;
+      background: var(--page-bg);
+    }
+
+    .side-label      { font-size: 18px; fill: #555; }
+    .annotation-text { font-size: 16px; fill: var(--text-secondary); }
+    .annotation-line { stroke: var(--line-color); stroke-width: 2; }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+  <script src="https://cdn.jsdelivr.net/gh/prosvitco/D3TaperedProcessDiagram@main/tapered-process-diagram.js" defer></script>
+</head>
+<body>
+
+  <div class="toolbar">
+    <button id="restart-animation" type="button">Restart animation</button>
+  </div>
+
+  <div class="grid">
+    <div class="chart-shell">
+      <svg id="chart-primary" role="img" aria-label="Clinical trial data workflow diagram"></svg>
+    </div>
+  </div>
+
+  <script>
+    const chartConfigs = [
+      {
+        el: "#chart-primary",
+        data: {
+          startLabel: { label: "Raw Clinical Trial Data", offset: 35 },
+          endLabel:   { label: "Informed Decisions",      offset: 35 },
+          sections: [
+            {
+              background: "#ffd6d6",
+              border:  { color: "#ff7f7f", width: 1 },
+              divider: { color: "#ff7f7f", width: 2 },
+              width: 0.25,
+              annotation: { label: "Data Collection",   side: "left",  color: "#ff7f7f" }
+            },
+            {
+              background: "#ffecd6",
+              border:  { color: "#ffaa5c", width: 1 },
+              divider: { color: "#ffaa5c", width: 2 },
+              width: 0.20,
+              annotation: { label: "Data Validation",   side: "right", color: "#ffaa5c" }
+            },
+            {
+              background: "#fffbd6",
+              border:  { color: "#f0c93a", width: 1 },
+              divider: { color: "#f0c93a", width: 2 },
+              width: 0.20,
+              annotation: { label: "Data Organization", side: "left",  color: "#f0c93a" }
+            },
+            {
+              background: "#d6f5e3",
+              border:  { color: "#4dcc8a", width: 1 },
+              divider: { color: "#4dcc8a", width: 2 },
+              width: 0.18,
+              annotation: { label: "Data Reporting",    side: "right", color: "#4dcc8a" }
+            },
+            {
+              background: "#d6eaff",
+              border:  { color: "#5aa8ff", width: 1 },
+              divider: { color: "#5aa8ff", width: 2 },
+              width: 0.17,
+              annotation: { label: "Data Analysis",     side: "left",  color: "#5aa8ff" }
+            }
+          ]
+        },
+        options: {
+          width: 900,
+          height: 700,
+          stageDuration: 650,
+          stageDelay: 300,
+          direction: "rtl",
+          annotationTextOffset: 60,
+          annotationLineGap: 12,
+          annotationLineTargetGap: 12
+        },
+        animate: true
+      }
+    ];
+
+    window.addEventListener("DOMContentLoaded", () => {
+      const diagrams = initAllTaperedProcessDiagrams(chartConfigs);
+      document.getElementById("restart-animation").addEventListener("click", () => {
+        restartAllTaperedProcessDiagrams(diagrams);
+      });
+    });
+  </script>
+
+</body>
+</html>
